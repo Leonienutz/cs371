@@ -15,10 +15,10 @@ local opt =
 frames = {
       --idle pose-
       { x = 0, y = 0, width = 75, height = 130}, --frame 1
-      { x = 0, y = 0, width = 150, height = 130}, --frame 1
-      { x = 0, y = 0, width = 225, height = 130}, --frame 1
-      { x = 0, y = 0, width = 300, height = 130}, --frame 1
-      { x = 0, y = 0, width = 375, height = 130}, --frame 1
+      { x = 75, y = 0, width = 75, height = 130}, --frame 1
+      { x = 150, y = 0, width = 75, height = 130}, --frame 1
+      { x = 225, y = 0, width = 75, height = 130}, --frame 1
+      { x = 300, y = 0, width = 75, height = 130}, --frame 1
      
   }
 }
