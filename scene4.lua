@@ -16,7 +16,25 @@ function scene:create( event )
    local sceneGroup = self.view
  
    -- Initialize the scene here.
-   local buttonBack = display.newRect(display.contentCenterX,50,100,50);
+  local buttonBack = widget.newButton(
+    {
+        left = display.contentCenterX - 50,
+        top = 10,
+        id = "back",
+        label = "Back",
+        labelColor = { default={ 0, 0, 0 }, over={ 0.5, 0.5, 0.5, 0.5 } },
+        onEvent = back,
+        emboss = false,
+        -- Properties for a rounded rectangle button
+        shape = "roundedRect",
+        width = 100,
+        height = 30,
+        cornerRadius = 4,
+        fillColor = { default={1,1,1,1}, over={1,1,1,0.4} },
+        strokeColor = { default={0.6,0.5,0.5,1}, over={0.8,0.8,1,1} },
+        strokeWidth = 2
+    }
+)
    sceneGroup:insert(buttonBack);
    
    local options = {
