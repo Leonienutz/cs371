@@ -15,10 +15,10 @@ local opt =
 frames = {
       --idle pose-
       { x = 0, y = 0, width = 75, height = 130}, --frame 1
-      { x = 75, y = 0, width = 75, height = 130}, --frame 1
-      { x = 150, y = 0, width = 75, height = 130}, --frame 1
-      { x = 225, y = 0, width = 75, height = 130}, --frame 1
-      { x = 300, y = 0, width = 75, height = 130}, --frame 1
+      { x = 0, y = 0, width = 150, height = 130}, --frame 1
+      { x = 0, y = 0, width = 225, height = 130}, --frame 1
+      { x = 0, y = 0, width = 300, height = 130}, --frame 1
+      { x = 0, y = 0, width = 375, height = 130}, --frame 1
      
   }
 }
@@ -71,6 +71,7 @@ local radButYellow = widget.newSwitch(
         onPress = onSwitchPress,
     }
 )
+sceneGroup:insert(radButYellow);
  local YellowText = display.newText("Yellow", display.contentCenterX, display.contentCenterY -130, native.systemFont, 15 )
  sceneGroup:insert(YellowText);
 
@@ -83,7 +84,7 @@ local radButBlue = widget.newSwitch(
         onPress = onSwitchPress,
     }
 )
-
+sceneGroup:insert(radButBlue);
  local BlueText = display.newText("Blue", display.contentCenterX, display.contentCenterY -90, native.systemFont, 15)
  sceneGroup:insert(BlueText);
 
@@ -96,6 +97,7 @@ local radButRed = widget.newSwitch(
         onPress = onSwitchPress,
     }
 )
+ sceneGroup:insert(radButRed);
  local RedText = display.newText("Red", display.contentCenterX, display.contentCenterY -50, native.systemFont, 15 )
  sceneGroup:insert(RedText);
 
@@ -108,7 +110,7 @@ local radButGreen = widget.newSwitch(
         onPress = onSwitchPress,
     }
 )
-
+sceneGroup:insert(radButGreen);
  local GreenText = display.newText("Green", display.contentCenterX, display.contentCenterY -10, native.systemFont, 15 )
  sceneGroup:insert(GreenText);
 
@@ -121,7 +123,7 @@ local radButPurple = widget.newSwitch(
         onPress = onSwitchPress,
     }
 )
-
+sceneGroup:insert(radButPurple);
  local PurpleText = display.newText("Purple", display.contentCenterX, display.contentCenterY +30, native.systemFont, 15 )
  sceneGroup:insert(PurpleText);
 
