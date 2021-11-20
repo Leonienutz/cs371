@@ -10,6 +10,23 @@ local scene = composer.newScene()
 
 ---------------------------------------------------------------------------------
  
+local opt =
+{
+frames = {
+      --idle pose-
+      { x = 0, y = 0, width = 75, height = 130}, --frame 1
+      { x = 0, y = 0, width = 150, height = 130}, --frame 1
+      { x = 0, y = 0, width = 225, height = 130}, --frame 1
+      { x = 0, y = 0, width = 300, height = 130}, --frame 1
+      { x = 0, y = 0, width = 375, height = 130}, --frame 1
+     
+  }
+}
+-- include sprite image sheet
+local sheet = graphics.newImageSheet( "cars.png", opt);
+
+
+
 -- "scene:create()"
 function scene:create( event )
  
@@ -19,7 +36,7 @@ function scene:create( event )
    local buttonBack = widget.newButton(
     {
         left = display.contentCenterX - 50,
-        top = 10,
+        top = 1,
         id = "back",
         label = "Back",
         labelColor = { default={ 0, 0, 0 }, over={ 0.5, 0.5, 0.5, 0.5 } },
@@ -41,6 +58,79 @@ function scene:create( event )
       effect = "fade",
       time = 100
    }
+
+   local colorText = display.newText("Car Color", display.contentCenterX, display.contentCenterY -180, native.systemFont, 20 )
+   sceneGroup:insert(colorText);
+
+local radButYellow = widget.newSwitch(
+    {
+        left = 20,
+        top = display.contentCenterY -150,
+        style = "radio",
+        initialSwitchState = true,
+        onPress = onSwitchPress,
+    }
+)
+ local YellowText = display.newText("Yellow", display.contentCenterX, display.contentCenterY -130, native.systemFont, 15 )
+ sceneGroup:insert(YellowText);
+
+local radButBlue = widget.newSwitch(
+    {
+        left = 20,
+        top = display.contentCenterY -110,
+        style = "radio",
+        initialSwitchState = false,
+        onPress = onSwitchPress,
+    }
+)
+
+ local BlueText = display.newText("Blue", display.contentCenterX, display.contentCenterY -90, native.systemFont, 15)
+ sceneGroup:insert(BlueText);
+
+local radButRed = widget.newSwitch(
+    {
+        left = 20,
+        top = display.contentCenterY -70,
+        style = "radio",
+        initialSwitchState = false,
+        onPress = onSwitchPress,
+    }
+)
+ local RedText = display.newText("Red", display.contentCenterX, display.contentCenterY -50, native.systemFont, 15 )
+ sceneGroup:insert(RedText);
+
+local radButGreen = widget.newSwitch(
+    {
+        left = 20,
+        top = display.contentCenterY -30,
+        style = "radio",
+        initialSwitchState = false,
+        onPress = onSwitchPress,
+    }
+)
+
+ local GreenText = display.newText("Green", display.contentCenterX, display.contentCenterY -10, native.systemFont, 15 )
+ sceneGroup:insert(GreenText);
+
+local radButPurple = widget.newSwitch(
+    {
+        left = 20,
+        top = display.contentCenterY+10,
+        style = "radio",
+        initialSwitchState = false,
+        onPress = onSwitchPress,
+    }
+)
+
+ local PurpleText = display.newText("Purple", display.contentCenterX, display.contentCenterY +30, native.systemFont, 15 )
+ sceneGroup:insert(PurpleText);
+
+
+
+
+
+
+
 
    local function back (event)
       composer.gotoScene("scene1", options);
