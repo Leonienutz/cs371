@@ -26,6 +26,19 @@ frames = {
 local sheet = graphics.newImageSheet( "cars.png", opt);
 
 
+local function onSwitchPress(event)
+	if(event.target.id == "yello") then
+		composer.setVariable("playerColor", "yellow")
+	elseif(event.target.id == "green") then
+		composer.setVariable("playerColor", "green")
+	elseif(event.target.id == "blue") then
+		composer.setVariable("playerColor", "blue")
+	elseif(event.target.id == "red") then
+		composer.setVariable("playerColor", "red")
+	elseif(event.target.id == "purple") then
+		composer.setVariable("playerColor", "purple")
+	end
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -67,6 +80,7 @@ local radButYellow = widget.newSwitch(
         left = 20,
         top = display.contentCenterY -150,
         style = "radio",
+		id = "yellow",
         initialSwitchState = true,
         onPress = onSwitchPress,
     }
@@ -80,6 +94,7 @@ local radButBlue = widget.newSwitch(
         left = 20,
         top = display.contentCenterY -110,
         style = "radio",
+		id = "blue",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
@@ -93,6 +108,7 @@ local radButRed = widget.newSwitch(
         left = 20,
         top = display.contentCenterY -70,
         style = "radio",
+		id = "red",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
@@ -106,6 +122,7 @@ local radButGreen = widget.newSwitch(
         left = 20,
         top = display.contentCenterY -30,
         style = "radio",
+		id = "green",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
@@ -118,7 +135,7 @@ local radButPurple = widget.newSwitch(
     {
         left = 20,
         top = display.contentCenterY+10,
-        style = "radio",
+        style = "purple",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }

@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
- 
+
+local Player = require("Player");
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -12,7 +13,7 @@ local scene = composer.newScene()
  
 -- "scene:create()"
 function scene:create( event )
- 
+	
    local sceneGroup = self.view
  
    -- Initialize the scene here.
@@ -49,6 +50,10 @@ function scene:create( event )
 
    buttonBack:addEventListener("tap", back);
    
+   --Create Player
+   player = Player:new({color = composer.getVariable("playerColor")});
+   player:spawn();
+   sceneGroup:insert(player.shape);
 end
 
 -- "scene:show()"
