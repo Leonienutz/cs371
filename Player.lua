@@ -1,6 +1,6 @@
 --Player Class. Inherits from Car class.
 local Car = require("Car")
-local Player = Car:new({xPos = display.contentCenterX, yPos = display.contentHeight - 50, deltaY = 0, tag = "Player", physicsType = "kinematic"});
+local Player = Car:new({xPos = display.contentCenterX, yPos = display.contentHeight - 50, deltaY = 0, deltaX = 10, tag = "Player", physicsType = "kinematic"});
 
 
 local opt =
@@ -60,5 +60,12 @@ function Player:setColor(color)
 	end
 end
 
+function Player:moveLeft()
+	self.shape.x = self.shape.x - self.deltaX;
+end
+
+function Player:moveRight()
+	self.shape.x = self.shape.x + self.deltaX;
+end
 physics.start( );
 return Player;
