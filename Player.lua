@@ -42,7 +42,22 @@ function Player:spawn()
 		self.shape.tag = self.tag; 
 		self.shape.x = self.xPos;
 		self.shape.y = self.yPos;
-		--self.outline = graphics.newOutline(2, sheet, 1)
+		
+		--Collision Stuff
+		physics.addBody(self.shape, self.physicsType, {shape = {-20, -30,  20, -30,  20, 30,  -20, 30}} )
+		
+		local function playerCollision(event)
+			if(event.phase == "began") then
+				print("I hit Something!")
+				if(event.other.tag == "Enemy") then
+					print("I hit enemy!")
+					self:sound();
+					--self:delete();
+				end
+			end
+		end
+		self.shape:addEventListener("collision", playerCollision);
+		
 	
 end
 
