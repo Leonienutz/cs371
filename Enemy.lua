@@ -26,7 +26,7 @@ local anim = display.newSprite (sheet, frameSeq);
 
 
 	
-function Enemy:spawn()
+function Enemy:spawn(grp)
 		self.shape = anim;
 		self.shape:setSequence("normal");
 		self.shape.xScale = 0.5;
@@ -38,30 +38,27 @@ function Enemy:spawn()
 		--set SPAWN POINT
 		mySpawnPoint = math.random(1,3);
 		if(mySpawnPoint == 1) then
-			self.xPos = 90;
+			self.xPos = 80;
 		elseif(mySpawnPoint == 2) then
-			self.xPos = 130;
+			self.xPos = 150;
 		elseif(mySpawnPoint == 3) then
-			self.xPos = 200;
+			self.xPos = 220;
 		end
 		self.shape.pp = self;  
 		self.shape.tag = self.tag; 
 		self.shape.x = self.xPos;
 		self.shape.y = self.yPos;
 		
+		if grp then grp:insert(self.shape) end
+		self:Fall();
+		--timer.performWithDelay(50, self:Fall(), 0);
+		 return self.shape
 		--self.outline = graphics.newOutline(2, sheet, 1)
 	
 end
 
 function Enemy:Fall()
-	if(self.shape ~= nil) then
-		self.shape.y = self.shape.y + self.deltaY;
-		if(self.shape.y > display.contentHeight + 60) then
-			self.shape:removeSelf();
-			self.shape = nil;
-			self = nil;
-		end
-	end
+	transition.to(self.shape, { time=1500, x=self.shape.x, y=display.contentHeight})
 end
 
 physics.start( );

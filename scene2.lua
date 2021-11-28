@@ -13,21 +13,36 @@ local enemies = {}; --Table to hold all newly created enemies;
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
-local function updateEnemies()
-	 for j,enemy in ipairs(enemies) do
-		if(enemy ~= nil) then
-			enemy:Fall();
-		end
-	 end
+local function enterFrame()
+	local temp = math.random(1,1000);
+	if(temp <= 10) then
+		local enemy = Enemy:new();
+		enemy:spawn(scene.view);
+		table.insert(enemies, enemy.shape) -- Maybe enemy.shape
+	end
+	-- sceneGroup:insert(enemy.shape);
 end
 
-local function spawnEnemy(sceneGroup)
-	enemy = Enemy:new();
-	enemy:spawn();
-	table.insert(enemies, enemy) -- Maybe enemy.shape
-	sceneGroup:insert(enemy.shape);
-	timer.performWithDelay(100, updateEnemies, 0);
-end
+-- local function updateEnemies()
+	 -- for j,enemy in ipairs(enemies) do
+		-- if(enemy.shape ~= nil) then
+			-- enemy:Fall();
+		-- end
+		-- if(enemy.shape.y > display.contentHeight + 30) then
+			-- enemy.shape:removeSelf();
+			-- enemy = nil;
+			-- table.remove(enemies, j)
+		-- end
+	 -- end
+-- end
+
+-- local function spawnEnemy(sceneGroup)
+	-- local enemy = Enemy:new();
+	-- enemy:spawn();
+	-- table.insert(enemies, enemy) -- Maybe enemy.shape
+	-- sceneGroup:insert(enemy.shape);
+	-- timer.performWithDelay(100, updateEnemies, 0);
+-- end
 
 
 local function moveLeft()
@@ -165,8 +180,8 @@ function scene:create( event )
    player:spawn();
    sceneGroup:insert(player.shape);
    
-   local myClosure = function() return spawnEnemy( sceneGroup ) end
-   eSpawnTimer = timer.performWithDelay(1000, myClosure, 0);
+   -- local myClosure = function() return spawnEnemy( sceneGroup ) end
+   -- eSpawnTimer = timer.performWithDelay(1000, myClosure, 0);
 
 	
 end
@@ -198,6 +213,15 @@ function scene:hide( event )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
+	   physics.pause()
+
+        for i, v in ipairs(enemies) do
+          if v.removeSelf then
+            v:removeSelf()
+          end
+        end
+
+        enemies = {}
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
@@ -220,7 +244,8 @@ scene:addEventListener("create", scene )
 scene:addEventListener("show", scene )
 scene:addEventListener("hide", scene )
 scene:addEventListener("destroy", scene )
- 
+
+Runtime:addEventListener("enterFrame", enterFrame)
 ---------------------------------------------------------------------------------
  
 return scene
