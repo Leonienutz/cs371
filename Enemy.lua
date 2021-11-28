@@ -47,15 +47,14 @@ local anim = display.newSprite (sheet, frameSeq);
 		self.shape.y = self.yPos;
 		
 		if grp then grp:insert(self.shape) end
-		--self:Fall();
-		--timer.performWithDelay(50, self:Fall(), 0);
 		 return self.shape
 		--self.outline = graphics.newOutline(2, sheet, 1)
 	
 end
 
 function Enemy:Fall()
-	transition.to(self.shape, { time=1500, x=self.shape.x, y=display.contentHeight})
+	self.transition = transition.to(self.shape, { time=1500, x=self.shape.x, y=display.contentHeight})
+	self.transition._onComplete = function () self:delete() end
 end
 
 physics.start( );
