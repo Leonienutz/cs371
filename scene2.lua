@@ -15,6 +15,12 @@ local Player = require("Player");
 function scene:create( event )
 	
    local sceneGroup = self.view
+	
+local bg = display.newImage ("road.png", display.contentCenterX, display.contentCenterY);
+bg.xScale = display.contentWidth / bg.width; 
+bg.yScale = display.contentHeight / bg.height;
+sceneGroup:insert(bg);
+bg:toBack() 
  
    -- Initialize the scene here.
    local buttonBack = widget.newButton(
