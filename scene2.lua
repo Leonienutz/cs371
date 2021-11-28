@@ -92,7 +92,6 @@ function scene:hide( event )
       -- Called immediately after scene goes off screen.
    end
 end
- 
 -- "scene:destroy()"
 function scene:destroy( event )
  
