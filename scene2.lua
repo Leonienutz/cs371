@@ -3,6 +3,7 @@ local scene = composer.newScene()
 
 local Player = require("Player");
 local Enemy = require("Enemy");
+score =0
 
 local enemies = {}; --Table to hold all newly created enemies;
 ---------------------------------------------------------------------------------
@@ -80,7 +81,11 @@ function scene:create( event )
 	bg.yScale = display.contentHeight / bg.height;
 	sceneGroup:insert(bg);
 	bg:toBack() 
-   -- Initialize the scene here.
+ 
+local scoreText= display.newText("Score ", display.contentWidth -15, 10, native.systemFont, 10)
+
+sceneGroup:insert(scoreText);
+
    local buttonBack = widget.newButton(
     {
         left = 0,
@@ -163,6 +168,8 @@ function scene:create( event )
    player = Player:new({color = composer.getVariable("playerColor")});
    player:spawn();
    sceneGroup:insert(player.shape);
+
+
    
 	
 end
@@ -177,6 +184,17 @@ function scene:show( event )
       -- Called when the scene is still off screen (but is about to come on screen).
 	player:setColor(composer.getVariable("playerColor"));
    elseif ( phase == "did" ) then
+
+ local scoreValueText= display.newText(score, display.contentWidth -14, 22, native.systemFont, 10)
+sceneGroup:insert(scoreValueText);
+   
+   function update()
+   scoreValueText.text = score;
+   end
+ 
+  timer.performWithDelay(10,update,0, "score_timer")
+
+
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
@@ -191,6 +209,7 @@ function scene:hide( event )
    local phase = event.phase
  
    if ( phase == "will" ) then
+      timer.cancel( "score_timer" )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
@@ -217,7 +236,8 @@ function scene:destroy( event )
    -- Insert code here to clean up the scene.
    -- Example: remove display objects, save state, etc.
 end
- 
+
+
 ---------------------------------------------------------------------------------
  
 -- Listener setup
