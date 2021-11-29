@@ -25,6 +25,7 @@ local anim = display.newSprite (sheet, frameSeq);
 function Player:spawn()
 		self.shape = anim;
 		self.shape:setSequence("normal");
+		--local joutline = graphics.newOutline(2, sheet, frameSeq);
 		self.shape.xScale = 0.5;
 		self.shape.yScale = 0.5;
 		if(self.color == "yellow") then
@@ -44,15 +45,15 @@ function Player:spawn()
 		self.shape.y = self.yPos;
 		
 		--Collision Stuff
-		physics.addBody(self.shape, self.physicsType, {shape = {-20, -30,  20, -30,  20, 30,  -20, 30}} )
+		physics.addBody(self.shape, self.physicsType, {shape = {-15, -28,  15, -28,  15, 28,  -15, 28--[[joutline]]}} )
 		
 		local function playerCollision(event)
 			if(event.phase == "began") then
 				print("I hit Something!")
 				if(event.other.tag == "Enemy") then
 					print("I hit enemy!")
-					self:sound();
 					score = 0;
+					self:sound();
 					--self:delete();
 				end
 			end

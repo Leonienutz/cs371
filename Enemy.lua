@@ -24,6 +24,7 @@ local frameSeq = {
 function Enemy:spawn(grp)
 		local sheet = graphics.newImageSheet( "cars.png", opt);
 		local anim = display.newSprite (sheet, frameSeq);
+		--local joutline = graphics.newOutline(2, sheet, frameSeq);
 		self.shape = anim;
 		self.shape:setSequence("normal");
 		self.shape.xScale = 0.5;
@@ -35,7 +36,7 @@ function Enemy:spawn(grp)
 		--set SPAWN POINT
 		mySpawnPoint = math.random(1,3);
 		if(mySpawnPoint == 1) then
-			self.xPos = 80;
+			self.xPos = 75;
 		elseif(mySpawnPoint == 2) then
 			self.xPos = 150;
 		elseif(mySpawnPoint == 3) then
@@ -48,7 +49,7 @@ function Enemy:spawn(grp)
 		
 		if grp then grp:insert(self.shape) end
 		
-		physics.addBody(self.shape, self.physicsType,{shape = {-20, -30,  20, -30,  20, 30,  -20, 30}} )
+		physics.addBody(self.shape, self.physicsType,{shape = {-15, -28,  15, -28,  15, 28,  -15, 28--[[joutline]]}} )
 		physics.setGravity(0, 0)
 		local function enemyCollision(event)
 			if(event.phase == "began") then
@@ -67,7 +68,7 @@ end
 
 function Enemy:Fall()
 	self.transition = transition.to(self.shape, { time=2500, x=self.shape.x, y=display.contentHeight}) --good speed 1500
-	self.transition._onComplete = function () self:delete() score= score + 1 end
+self.transition._onComplete = function () self:delete() score= score + 1 end
 end
 
 physics.start( );
