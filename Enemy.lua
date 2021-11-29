@@ -67,7 +67,7 @@ end
 
 function Enemy:Fall()
 	self.transition = transition.to(self.shape, { time=2500, x=self.shape.x, y=display.contentHeight}) --good speed 1500
-	self.transition._onComplete = function () self:delete() end
+	self.transition._onComplete = function () self:delete() score= score + 1 end
 end
 
 physics.start( );
