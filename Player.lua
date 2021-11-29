@@ -52,6 +52,7 @@ function Player:spawn()
 				if(event.other.tag == "Enemy") then
 					print("I hit enemy!")
 					self:sound();
+					score = 0;
 					--self:delete();
 				end
 			end
