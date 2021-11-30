@@ -49,6 +49,27 @@ local frameSeq2 = {
 	{name = "explode", start = 1, count = 18, time= 300, loopCount = 1}
 }
 local anim2 = display.newSprite(sheet2,frameSeq2);
+local opt3 =
+{
+frames = {
+      --idle pose-
+      { x = 60, y = 175, width = 173, height = 166}, --frame 1 blank
+      { x = 24, y = 344, width = 200, height = 200}, --frame 2 green
+      { x = 274, y = 344, width = 200, height = 200}, --frame 3 red
+      { x = 60, y = 175, width = 173, height = 166}, --frame 4 blank
+      { x = 524, y = 344, width = 200, height = 200}, --frame 5 blue
+      
+  }
+}
+
+local frameSeq3 = {
+	{name = "powers", start = 1,count = 5, time= 300}
+}
+
+local sheet3 = graphics.newImageSheet( "powerupspritesheet.png", opt3);
+local anim3 = display.newSprite (sheet3, frameSeq3);
+
+
 -- include sprite image sheet
 local sheet = graphics.newImageSheet( "cars.png", opt);
 local anim = display.newSprite (sheet, frameSeq);		
@@ -102,8 +123,8 @@ function Player:spawn()
 				end
 				if(event.other.tag == "addTime") then
 					print("I hit addTime Power-up!")
-					score = score + 1;
-					secondsLeft = secondsLeft + 5;
+					score = score + 10;
+					secondsLeft = secondsLeft - 5;
 					self:powerupsound();
 					anim2.x = event.target.x
 					--anim2:setSequence("explode");
@@ -129,9 +150,18 @@ function Player:spawn()
 					self:powerupsound();
 					self.shape.isShielded = true;
 					anim2.x = event.target.x
+					
+					anim3.xScale = 0.50;
+					anim3.yScale = 0.50
+					anim3.x = self.shape.x
+					anim3.y = self.shape.y
+					anim3:setSequence("powers");
+    									
 					local function listener( event )
     						print( "shield gone" )
     						self.shape.isShielded = false;
+    						anim3:setSequence("powers");
+
 					end
 					timer.performWithDelay(2000, listener)
 					--anim2:setSequence("explode");
@@ -143,7 +173,7 @@ function Player:spawn()
 		end
 		self.shape:addEventListener("collision", playerCollision);
 		
-	return self.shape
+	
 end
 
 function Player:setColor(color)
@@ -162,10 +192,12 @@ end
 
 function Player:moveLeft()
 	self.shape.x = self.shape.x - self.deltaX;
+	anim3.x = self.shape.x
 end
 
 function Player:moveRight()
 	self.shape.x = self.shape.x + self.deltaX;
+	anim3.x = self.shape.x
 end
 physics.start( );
 return Player;

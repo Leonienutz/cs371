@@ -76,6 +76,13 @@ function scene:create( event )
       });
    end
    leaderboardButton:addEventListener("tap", leaderboard);
+   
+   local path = system.pathForFile("pointsRecord.csv", system.DocumentsDirectory);
+   local file = io.open(path, "w");
+   file:write("NAME, POINTS,\nJim, 2000")
+		file:write("\nVic, 1800")
+		io.close(file)
+		file = nil;
 end
  
 -- "scene:show()"

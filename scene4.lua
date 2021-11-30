@@ -59,7 +59,6 @@ function scene:create( event )
 		io.close(file)
 		file = nil;
 		f = csv.open(path, {separator = ",", header = true});
-		--print("f equals: " .. f);
 		print(path);
    end
    
@@ -68,7 +67,6 @@ function scene:create( event )
    sceneGroup:insert(leaderBoardText);
    
 
-   
    --Print sorted entries
    local counter = 1;
    for record in f:lines() do
@@ -78,8 +76,7 @@ function scene:create( event )
 		sceneGroup:insert(recordPoints);
 		counter = counter + 1;
    end
-   
-   
+
 end
 
 -- "scene:show()"
