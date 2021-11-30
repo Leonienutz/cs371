@@ -62,7 +62,7 @@ local function enterFrame()
    if (temp <= 2) then 
       spawnHeart();
       end   
-   if (temp <= 20) then
+   if (temp <= 1) then
       spawnShield();
       end
 
@@ -274,8 +274,9 @@ function scene:show( event )
    local phase = event.phase
 
    if ( phase == "will" ) then
-      -- Called when the scene is still off screen (but is about to come on screen).
       physics.start();
+      -- Called when the scene is still off screen (but is about to come on screen).
+      
       local function updateTime( event )
     -- Decrement the number of seconds
     secondsLeft = secondsLeft + 1
