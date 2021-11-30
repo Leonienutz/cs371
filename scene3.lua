@@ -77,71 +77,77 @@ function scene:create( event )
 
 local radButYellow = widget.newSwitch(
     {
-        left = 20,
-        top = display.contentCenterY -150,
+        left = 100,
+        top = display.contentCenterY -145,
         style = "radio",
 		id = "yellow",
         initialSwitchState = true,
         onPress = onSwitchPress,
     }
 )
+radButYellow:scale( 0.7, 0.7 )
 sceneGroup:insert(radButYellow);
- local YellowText = display.newText("Yellow", display.contentCenterX, display.contentCenterY -130, native.systemFont, 15 )
+ local YellowText = display.newText("Yellow", display.contentCenterX, display.contentCenterY -129, native.systemFont, 15 )
  sceneGroup:insert(YellowText);
 
 local radButBlue = widget.newSwitch(
     {
-        left = 20,
-        top = display.contentCenterY -110,
+        left = 100,
+        top = display.contentCenterY -105,
         style = "radio",
 		id = "blue",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
 )
+radButBlue:scale( 0.7, 0.7 )
 sceneGroup:insert(radButBlue);
- local BlueText = display.newText("Blue", display.contentCenterX, display.contentCenterY -90, native.systemFont, 15)
+ local BlueText = display.newText("Blue", display.contentCenterX, display.contentCenterY -89, native.systemFont, 15)
  sceneGroup:insert(BlueText);
 
 local radButRed = widget.newSwitch(
     {
-        left = 20,
-        top = display.contentCenterY -70,
+        left = 100,
+        top = display.contentCenterY -65,
         style = "radio",
 		id = "red",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
 )
+radButRed:scale( 0.7, 0.7 )
  sceneGroup:insert(radButRed);
- local RedText = display.newText("Red", display.contentCenterX, display.contentCenterY -50, native.systemFont, 15 )
+ local RedText = display.newText("Red", display.contentCenterX, display.contentCenterY -49, native.systemFont, 15 )
  sceneGroup:insert(RedText);
 
 local radButGreen = widget.newSwitch(
     {
-        left = 20,
-        top = display.contentCenterY -30,
+        left = 100,
+        top = display.contentCenterY -27,
         style = "radio",
 		id = "green",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
 )
+radButGreen:scale( 0.7, 0.7 )
 sceneGroup:insert(radButGreen);
  local GreenText = display.newText("Green", display.contentCenterX, display.contentCenterY -10, native.systemFont, 15 )
  sceneGroup:insert(GreenText);
 
 local radButPurple = widget.newSwitch(
     {
-        left = 20,
-        top = display.contentCenterY+10,
-        style = "purple",
+        left = 100,
+        top = display.contentCenterY+17,
+        style = "radio",
+        id = "purple",
         initialSwitchState = false,
         onPress = onSwitchPress,
     }
 )
+radButPurple:scale( 0.7, 0.7 )
 sceneGroup:insert(radButPurple);
- local PurpleText = display.newText("Purple", display.contentCenterX, display.contentCenterY +30, native.systemFont, 15 )
+ local PurpleText = display.newText("Purple", display.contentCenterX, display.contentCenterY +33, native.systemFont, 15 )
  sceneGroup:insert(PurpleText);
 
 

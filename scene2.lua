@@ -1,8 +1,18 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
+score =0
+timealive = 0
+HitPoints = 3
+ secondsLeft = 0  -- 10 minutes * 60 seconds
+ clockText = display.newText( "0:00", display.contentCenterX + 130, -20, native.systemFont, 25 )
+clockText:setFillColor( 0,0 , 0 )
 local Player = require("Player");
 local Enemy = require("Enemy");
+local heart = require("addHeart")
+local time = require("addTime")
+local shield = require("addShield")
+local scrollSpeed = 8
+--physics.setDrawMode( "hybrid" )
 
 local enemies = {}; --Table to hold all newly created enemies;
 ---------------------------------------------------------------------------------
@@ -19,35 +29,90 @@ local function spawnEnemy()
 	enemy1:Fall();
 	table.insert(enemies, enemy1.shape) -- Maybe enemy.shape
 end
+local function spawnHeart()
+   local power1 = heart:new({yPos = -60});
+   power1:spawn(scene.view);
+   power1:Fall();
+   table.insert(enemies, power1.shape) -- Maybe enemy.shape
+end
+local function spawnTime()
+   local power2 = time:new({yPos = -60});
+   power2:spawn(scene.view);
+   power2:Fall();
+   table.insert(enemies, power2.shape) -- Maybe enemy.shape
+end
 
+local function spawnShield()
+   local power3 = shield:new({yPos = -60});
+   power3:spawn(scene.view);
+   power3:Fall();
+   table.insert(enemies, power3.shape) -- Maybe enemy.shape
+end
 local function enterFrame()
 	local temp = math.random(1,1000);
 	if(temp <= 10) then
 		spawnEnemy();
-	end
+      --spawnHeart();
+      --spawnTime();
+      --spawnShield();
+	  end
+   if (temp <= 3) then
+      spawnTime();
+      end
+   if (temp <= 2) then 
+      spawnHeart();
+      end   
+   if (temp <= 1) then
+      spawnShield();
+      end
 
+	if(player.hp <= 0 or secondsLeft >= 300) then
+      timer.cancel( countDownTimer )
+		player:delete();
+      print(secondsLeft)
+      print()
+      print(HitPoints)
+     --timealive = 180 - 
+      score = (score + HitPoints + secondsLeft) * 100
+		local options = {
+         isModal = true,
+      effect = "fade",
+      time = 500,
+	  params = {
+		pPoints = score;
+	  }
+   }
+		Runtime:removeEventListener("enterFrame", enterFrame)
+		composer.showOverlay("gameOver", options);
+		
+	end
+	
 end
 
 
 
 local function moveLeft()
+   if(player.shape ~= nil)then 
 	if(player.shape.x < 80) then
 		return
 	end
 	player:moveLeft();
 end
+end
 
 local function moveRight()
+    if(player.shape ~= nil)then
 	if(player.shape.x > display.contentWidth - 80) then
 		return
 	end
 	player:moveRight();
 end
+end
 
 	local function leftHandler(event)
 		
 		if event.phase == "began" then
-			myTimer = timer.performWithDelay(100, moveLeft, 0);
+			myTimer = timer.performWithDelay(30, moveLeft, 0);
 			print(myTimer)
 			print("Move left")
 		elseif event.phase == "ended" then
@@ -59,7 +124,7 @@ end
 	local function rightHandler(event)
 		
 		if event.phase == "began" then
-			myTimer = timer.performWithDelay(100, moveRight, 0);
+			myTimer = timer.performWithDelay(30, moveRight, 0);
 			print(myTimer)
 			--player:moveLeft();
 			print("Move left")
@@ -80,7 +145,42 @@ function scene:create( event )
 	bg.yScale = display.contentHeight / bg.height;
 	sceneGroup:insert(bg);
 	bg:toBack() 
+   local bg2 = display.newImage ("road.png", display.contentCenterX, display.contentCenterY+600);
+   bg2.xScale = display.contentWidth / bg2.width; 
+   bg2.yScale = display.contentHeight / bg2.height;
+   sceneGroup:insert(bg2);
+   bg2:toBack() 
+   local bg3 = display.newImage ("road.png", display.contentCenterX, display.contentCenterY+1200);
+   bg3.xScale = display.contentWidth / bg3.width; 
+   bg3.yScale = display.contentHeight / bg3.height;
+   sceneGroup:insert(bg3);
+   bg3:toBack() 
+
+   local function move(event)
+         bg.y = bg.y + scrollSpeed
+         bg2.y = bg2.y + scrollSpeed
+         bg3.y = bg3.y + scrollSpeed
+         if(bg.y+bg.contentWidth)> 1040 then
+            bg:translate(0,-960)
+         end
+         if(bg2.y+bg2.contentWidth)> 1040 then
+            bg2:translate(0,-960)
+         end
+         if(bg3.y+bg3.contentWidth)> 1040 then
+            bg3:translate(0,-960)
+         end
+   end
+   Runtime:addEventListener("enterFrame", move)
    -- Initialize the scene here.
+
+local scoreText= display.newText("Score ", display.contentWidth -15, 10, native.systemFont, 10)
+
+sceneGroup:insert(scoreText);
+
+local PlayerHP= display.newText("HP:  ", display.contentWidth -25, 40, native.systemFont, 10)
+
+sceneGroup:insert(PlayerHP);
+
    local buttonBack = widget.newButton(
     {
         left = 0,
@@ -174,9 +274,41 @@ function scene:show( event )
    local phase = event.phase
 
    if ( phase == "will" ) then
+      physics.start();
       -- Called when the scene is still off screen (but is about to come on screen).
+      
+      local function updateTime( event )
+    -- Decrement the number of seconds
+    secondsLeft = secondsLeft + 1
+    -- Time is tracked in seconds; convert it to minutes and seconds
+    local minutes = math.floor( secondsLeft / 60 )
+    local seconds = secondsLeft % 60
+    -- Make it a formatted string
+    local timeDisplay = string.format( "%2d:%02d", minutes, seconds )
+    -- Update the text object
+    clockText.text = timeDisplay
+end
+   if player.hp > 0 then
+	  countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
+   end
+	  Runtime:addEventListener("enterFrame", enterFrame)
 	player:setColor(composer.getVariable("playerColor"));
+	
    elseif ( phase == "did" ) then
+
+ local scoreValueText= display.newText(score, display.contentWidth -14, 22, native.systemFont, 10)
+sceneGroup:insert(scoreValueText);
+local HPValueText= display.newText(player.hp, display.contentWidth -14, 40, native.systemFont, 10)
+sceneGroup:insert(HPValueText);
+-------------------------------------------------------------------------------------------------------------
+   function update()
+   scoreValueText.text = score;
+   HPValueText.text = HitPoints
+   end
+------------------------------------------------------------------------------------------------------
+  timer.performWithDelay(10,update,0, "score_timer")
+
+
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
@@ -189,8 +321,9 @@ function scene:hide( event )
  
    local sceneGroup = self.view
    local phase = event.phase
- 
+   Runtime:removeEventListener("enterFrame", enterFrame)
    if ( phase == "will" ) then
+       timer.cancel( "score_timer" )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
@@ -198,11 +331,13 @@ function scene:hide( event )
 
         for i, v in ipairs(enemies) do
           if v.removeSelf then
-            v:removeSelf()
+			transition.cancel(v.transition)
+            v:removeSelf();
           end
         end
 
         enemies = {}
+		
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
@@ -226,7 +361,7 @@ scene:addEventListener("show", scene )
 scene:addEventListener("hide", scene )
 scene:addEventListener("destroy", scene )
 
-Runtime:addEventListener("enterFrame", enterFrame)
+
 ---------------------------------------------------------------------------------
  
 return scene

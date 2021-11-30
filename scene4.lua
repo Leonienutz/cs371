@@ -1,6 +1,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
- 
+local csv = require("csv");
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -47,6 +47,38 @@ function scene:create( event )
    end
 
    buttonBack:addEventListener("tap", back);
+   
+   --Create/Open LEADERBOARD Record File ////////////////////////////////
+   local path = system.pathForFile("pointsRecord.csv", system.DocumentsDirectory);
+   f = csv.open(path, {separator = ",", header = true});
+   if(f == nil) then
+		print("Making new CSV file")
+		local file = io.open(path, "w");
+		file:write("NAME, POINTS,\nJim, 2000")
+		file:write("\nVic, 1800")
+		io.close(file)
+		file = nil;
+		f = csv.open(path, {separator = ",", header = true});
+		--print("f equals: " .. f);
+		print(path);
+   end
+   
+   --Create LeaderBoard GUI ///////////////////////////////////
+   local leaderBoardText = display.newText("LEADERBOARD", display.contentCenterX, display.contentCenterY -100, native.systemFont, 30 )
+   sceneGroup:insert(leaderBoardText);
+   
+
+   
+   --Print sorted entries
+   local counter = 1;
+   for record in f:lines() do
+		local recordName = display.newText(record.NAME, display.contentCenterX - 60, display.contentCenterY -80 + (20*counter), native.systemFont, 20 )
+		local recordPoints = display.newText(record.POINTS, display.contentCenterX + 60, display.contentCenterY -80 + (20*counter), native.systemFont, 20 )
+		sceneGroup:insert(recordName);
+		sceneGroup:insert(recordPoints);
+		counter = counter + 1;
+   end
+   
    
 end
 
