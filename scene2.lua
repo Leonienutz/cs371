@@ -274,6 +274,7 @@ function scene:show( event )
    local phase = event.phase
 
    if ( phase == "will" ) then
+      physics.start();
       -- Called when the scene is still off screen (but is about to come on screen).
       
       local function updateTime( event )
