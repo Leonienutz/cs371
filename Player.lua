@@ -17,7 +17,7 @@ frames = {
 }
 
 local frameSeq = {
-	{name = "normal", start = 1, count = 5, time= 500, loopCount =4 }
+	{name = "normal", start = 1, count = 5, time= 300}
 }
 local opt2 =
 {
@@ -49,8 +49,6 @@ local frameSeq2 = {
 	{name = "explode", start = 1, count = 18, time= 300, loopCount = 1}
 }
 local anim2 = display.newSprite(sheet2,frameSeq2);
-
-
 -- include sprite image sheet
 local sheet = graphics.newImageSheet( "cars.png", opt);
 local anim = display.newSprite (sheet, frameSeq);		
@@ -104,8 +102,8 @@ function Player:spawn()
 				end
 				if(event.other.tag == "addTime") then
 					print("I hit addTime Power-up!")
-					score = score + 10;
-					secondsLeft = secondsLeft - 5;
+					score = score + 1;
+					secondsLeft = secondsLeft + 5;
 					self:powerupsound();
 					anim2.x = event.target.x
 					--anim2:setSequence("explode");
@@ -131,34 +129,21 @@ function Player:spawn()
 					self:powerupsound();
 					self.shape.isShielded = true;
 					anim2.x = event.target.x
-					
-					anim.x = self.shape.x
-					anim.y = self.shape.y
-    					self.shape:play();					
 					local function listener( event )
     						print( "shield gone" )
     						self.shape.isShielded = false;
-    						if(self.color == "yellow") then
-						self.shape:setFrame(1);
-						elseif(self.color == "blue") then
-						self.shape:setFrame(2)
-						elseif(self.color == "red") then
-						self.shape:setFrame(3)
-						elseif(self.color == "green") then
-						self.shape:setFrame(4)
-						elseif(self.color == "purple") then
-						self.shape:setFrame(5)
-						end
-    						
 					end
 					timer.performWithDelay(2000, listener)
+					--anim2:setSequence("explode");
+					--anim2:play();
 					
+					--self:delete();
 				end
 			end
 		end
 		self.shape:addEventListener("collision", playerCollision);
 		
-	
+	return self.shape
 end
 
 function Player:setColor(color)
@@ -177,12 +162,10 @@ end
 
 function Player:moveLeft()
 	self.shape.x = self.shape.x - self.deltaX;
-	anim.x = self.shape.x
 end
 
 function Player:moveRight()
 	self.shape.x = self.shape.x + self.deltaX;
-	anim.x = self.shape.x
 end
 physics.start( );
 return Player;
