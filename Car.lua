@@ -1,7 +1,7 @@
 --Parent Class for all Car charcters
 local physics = require("physics");
 
-local Car = {tag="Car", HP=1, xPos=0, yPos=0, deltaX = 0, deltaY = 5, physicsType = "dynamic", color = "yellow", transition = nil};
+local Car = {tag="Car", HP=1, xPos=0, yPos=0, deltaX = 0, deltaY = 5, physicsType = "dynamic", color = "yellow", transition = nil, isShielded = false};
 
 function Car:new (o)    --constructor
   o = o or {}; 

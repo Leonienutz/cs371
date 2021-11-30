@@ -73,7 +73,7 @@ function Player:spawn()
 		self.shape.tag = self.tag; 
 		self.shape.x = self.xPos;
 		self.shape.y = self.yPos;
-	
+		self.shape.isShielded = self.isShielded;
 		anim2.y = self.shape.y - 50
 		--Collision Stuff
 		physics.addBody(self.shape, self.physicsType, {shape = {-15, -28,  15, -28,  15, 28,  -15, 28--[[joutline]]}} )
@@ -81,13 +81,19 @@ function Player:spawn()
 		local function playerCollision(event)
 			if(event.phase == "began") then
 				print("I hit Something!")
+				
 				if(event.other.tag == "Enemy") then
 					print("I hit enemy!")
 					self:sound();
 					anim2.x = event.target.x
 					anim2:setSequence("explode");
 					anim2:play();
-					self.hp = self.hp - 1;
+					if(self.shape.isShielded == false) then
+						self.hp = self.hp - 1;
+					end
+					if(self.shape.isShielded == true) then
+						print("Shielded")
+					end
 					HitPoints = self.hp;
 
 					-- if(self.hp == 0) then
@@ -121,11 +127,11 @@ function Player:spawn()
 					print("I hit addShield Power-up!")
 					score = score + 1;
 					self:powerupsound();
-					self.shape.physicsType = "kinematic"
+					self.shape.isShielded = true;
 					anim2.x = event.target.x
 					local function listener( event )
     						print( "shield gone" )
-    						self.shape.physicsType = "static"
+    						self.shape.isShielded = false;
 					end
 					timer.performWithDelay(2000, listener)
 					--anim2:setSequence("explode");
