@@ -12,7 +12,7 @@ local heart = require("addHeart")
 local time = require("addTime")
 local shield = require("addShield")
 local scrollSpeed = 8
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 local enemies = {}; --Table to hold all newly created enemies;
 ---------------------------------------------------------------------------------
@@ -274,9 +274,8 @@ function scene:show( event )
    local phase = event.phase
 
    if ( phase == "will" ) then
-      physics.start();
       -- Called when the scene is still off screen (but is about to come on screen).
-      
+      physics.start();
       local function updateTime( event )
     -- Decrement the number of seconds
     secondsLeft = secondsLeft + 1
