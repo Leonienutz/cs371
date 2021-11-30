@@ -16,7 +16,7 @@ local scene = composer.newScene()
 		local file = io.open(path, "a");
 		print(path);
 		print(file);
-		file:write(myTextField.text .. ", ")
+		file:write("\n" .. myTextField.text .. ", ")
 		file:write(score)
 		io.close(file)
 		file = nil;
