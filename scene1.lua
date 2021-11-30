@@ -1,6 +1,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
- 
+ local GlobalMusic = audio.loadStream( "GlobalMusic.wav" )
+ audio.setVolume( 0.35, { channel=1 } )
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -12,10 +13,12 @@ local scene = composer.newScene()
  
 -- "scene:create()"
 function scene:create( event )
+
  
    local sceneGroup = self.view
  
    -- Initialize the scene here.
+   local backgroundMusicChannel = audio.play( GlobalMusic, { channel=1, loops=-1, fadein=5000} )
 
    local bg = display.newImage ("bgmain.jpg", display.contentCenterX, display.contentCenterY);
    bg.xScale = display.contentWidth / bg.width; 

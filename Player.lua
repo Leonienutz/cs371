@@ -1,6 +1,6 @@
 --Player Class. Inherits from Car class.
 local Car = require("Car")
-local Player = Car:new({xPos = display.contentCenterX, yPos = display.contentHeight - 50, deltaY = 0, deltaX = 10, tag = "Player", physicsType = "kinematic"});
+local Player = Car:new({xPos = display.contentCenterX, yPos = display.contentHeight - 50, deltaY = 0, deltaX = 10, tag = "Player", physicsType = "kinematic", hp = 3});
 
 
 local opt =
@@ -19,12 +19,43 @@ frames = {
 local frameSeq = {
 	{name = "normal", start = 1, count = 5, time= 300}
 }
+local opt2 =
+{
+frames = {
+      --idle pose-
+       { x = 175, y = 190, width = 28, height = 34}, --frame 0 yellow
+      { x = 0, y = 0, width = 59, height = 58}, --frame 1 yellow
+      { x = 61, y = 0, width = 59, height = 58}, --frame 2 blue
+      { x = 122, y = 0, width = 59, height = 58}, --frame 3 red
+      { x = 185, y = 0, width = 59, height = 58}, --frame 4 green
+      { x = 0, y = 65, width = 59, height = 58}, --frame 5 purple
+     { x = 61, y = 65, width = 59, height = 58}, --frame 6 purple
+     { x = 122, y = 65, width = 59, height = 58},--frame 7 purple
+     { x = 185, y = 65, width = 59, height = 58},--frame 8 purple
+     { x = 0, y = 130, width = 59, height = 58},--frame 9 purple
+     { x = 61, y = 130, width = 59, height = 58},--frame 10 purple
+     { x = 122, y = 130, width = 59, height = 58},--frame 11 purple
+     { x = 185, y = 130, width = 59, height = 58},--frame 12 purple
+     { x = 0, y = 190, width = 59, height = 58},--frame 13 purple
+     { x = 61, y = 190, width = 59, height = 58},--frame 14 purple
+     { x = 122, y = 190, width = 59, height = 58},--frame 15 purple
+     { x = 185, y = 190, width = 59, height = 58},--frame 16 purple
+     { x = 175, y = 190, width = 28, height = 34}, --frame 17 yellow
+  }
+}
+local sheet2 = graphics.newImageSheet( "exp2.png", opt2);
+
+local frameSeq2 = {
+	{name = "explode", start = 1, count = 18, time= 300, loopCount = 1}
+}
+local anim2 = display.newSprite(sheet2,frameSeq2);
 -- include sprite image sheet
 local sheet = graphics.newImageSheet( "cars.png", opt);
 local anim = display.newSprite (sheet, frameSeq);		
 function Player:spawn()
 		self.shape = anim;
 		self.shape:setSequence("normal");
+		--local joutline = graphics.newOutline(2, sheet, frameSeq);
 		self.shape.xScale = 0.5;
 		self.shape.yScale = 0.5;
 		if(self.color == "yellow") then
@@ -42,7 +73,61 @@ function Player:spawn()
 		self.shape.tag = self.tag; 
 		self.shape.x = self.xPos;
 		self.shape.y = self.yPos;
-		--self.outline = graphics.newOutline(2, sheet, 1)
+	
+		anim2.y = self.shape.y - 50
+		--Collision Stuff
+		physics.addBody(self.shape, self.physicsType, {shape = {-15, -28,  15, -28,  15, 28,  -15, 28--[[joutline]]}} )
+		
+		local function playerCollision(event)
+			if(event.phase == "began") then
+				print("I hit Something!")
+				if(event.other.tag == "Enemy") then
+					print("I hit enemy!")
+					score = 0;
+					self:sound();
+					anim2.x = event.target.x
+					anim2:setSequence("explode");
+					anim2:play();
+					self.hp = self.hp - 1;
+					-- if(self.hp == 0) then
+						-- self:delete();
+					-- end
+				end
+				if(event.other.tag == "addTime") then
+					print("I hit addTime Power-up!")
+					score = score + 1;
+					self:powerupsound();
+					anim2.x = event.target.x
+					--anim2:setSequence("explode");
+					--anim2:play();
+					
+					--self:delete();
+				end
+				if(event.other.tag == "addHeart") then
+					print("I hit addHeart Power-up!")
+					score = score + 1;
+					self:powerupsound();
+					anim2.x = event.target.x
+					self.hp = self.hp + 1;
+					--anim2:setSequence("explode");
+					--anim2:play();
+					
+					--self:delete();
+				end
+				if(event.other.tag == "addShield") then
+					print("I hit addShield Power-up!")
+					score = score + 1;
+					self:powerupsound();
+					anim2.x = event.target.x
+					--anim2:setSequence("explode");
+					--anim2:play();
+					
+					--self:delete();
+				end
+			end
+		end
+		self.shape:addEventListener("collision", playerCollision);
+		
 	
 end
 

@@ -1,7 +1,7 @@
 --Parent Class for all Car charcters
 local physics = require("physics");
 
-local Car = {tag="Car", HP=1, xPos=0, yPos=0, deltaX = 0, deltaY = 5, physicsType = "dynamic", color = "yellow"};
+local Car = {tag="Car", HP=1, xPos=0, yPos=0, deltaX = 0, deltaY = 5, physicsType = "dynamic", color = "yellow", transition = nil};
 
 function Car:new (o)    --constructor
   o = o or {}; 
@@ -19,13 +19,20 @@ function Car:spawn()
 end
 
 function Car:delete()
-	self.shape:removeSelf();
-	self.shape = nil;
+	if(self.shape ~= nil) then
+		self.shape:removeSelf();
+		self.shape = nil;
+	end
 end
 
 function Car:sound()
 	local soundEffect = audio.loadSound( "CarCrash.wav" ) --https://mixkit.co/free-sound-effects/crash/
 	audio.play( soundEffect )
+end
+
+function Car:powerupsound()
+	local soundEffect2 = audio.loadSound( "PowerUp_Sound.wav" ) --https://mixkit.co/free-sound-effects/crash/
+	audio.play( soundEffect2 )
 end
 
 return Car;
