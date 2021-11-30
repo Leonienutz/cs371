@@ -1,8 +1,13 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
+score =0
 local Player = require("Player");
 local Enemy = require("Enemy");
+local heart = require("addHeart")
+local time = require("addTime")
+local shield = require("addShield")
+local scrollSpeed = 8
+physics.setDrawMode( "hybrid" )
 
 local enemies = {}; --Table to hold all newly created enemies;
 ---------------------------------------------------------------------------------
@@ -19,12 +24,41 @@ local function spawnEnemy()
 	enemy1:Fall();
 	table.insert(enemies, enemy1.shape) -- Maybe enemy.shape
 end
-
+local function spawnHeart()
+   local power1 = heart:new({yPos = -60});
+   power1:spawn(scene.view);
+   power1:Fall();
+   table.insert(enemies, power1.shape) -- Maybe enemy.shape
+end
+local function spawnTime()
+   local power2 = time:new({yPos = -60});
+   power2:spawn(scene.view);
+   power2:Fall();
+   table.insert(enemies, power2.shape) -- Maybe enemy.shape
+end
+local function spawnShield()
+   local power3 = shield:new({yPos = -60});
+   power3:spawn(scene.view);
+   power3:Fall();
+   table.insert(enemies, power3.shape) -- Maybe enemy.shape
+end
 local function enterFrame()
 	local temp = math.random(1,1000);
 	if(temp <= 10) then
 		spawnEnemy();
-	end
+      --spawnHeart();
+      --spawnTime();
+      --spawnShield();
+	  end
+   if (temp <= 3) then
+      spawnTime();
+      end
+   if (temp <= 2) then
+      spawnHeart();
+      end   
+   if (temp <= 1) then
+      spawnShield();
+      end
 
 end
 
@@ -47,7 +81,7 @@ end
 	local function leftHandler(event)
 		
 		if event.phase == "began" then
-			myTimer = timer.performWithDelay(100, moveLeft, 0);
+			myTimer = timer.performWithDelay(30, moveLeft, 0);
 			print(myTimer)
 			print("Move left")
 		elseif event.phase == "ended" then
@@ -59,7 +93,7 @@ end
 	local function rightHandler(event)
 		
 		if event.phase == "began" then
-			myTimer = timer.performWithDelay(100, moveRight, 0);
+			myTimer = timer.performWithDelay(30, moveRight, 0);
 			print(myTimer)
 			--player:moveLeft();
 			print("Move left")
@@ -80,7 +114,39 @@ function scene:create( event )
 	bg.yScale = display.contentHeight / bg.height;
 	sceneGroup:insert(bg);
 	bg:toBack() 
+   local bg2 = display.newImage ("road.png", display.contentCenterX, display.contentCenterY+600);
+   bg2.xScale = display.contentWidth / bg2.width; 
+   bg2.yScale = display.contentHeight / bg2.height;
+   sceneGroup:insert(bg2);
+   bg2:toBack() 
+   local bg3 = display.newImage ("road.png", display.contentCenterX, display.contentCenterY+1200);
+   bg3.xScale = display.contentWidth / bg3.width; 
+   bg3.yScale = display.contentHeight / bg3.height;
+   sceneGroup:insert(bg3);
+   bg3:toBack() 
+
+   local function move(event)
+         bg.y = bg.y + scrollSpeed
+         bg2.y = bg2.y + scrollSpeed
+         bg3.y = bg3.y + scrollSpeed
+         if(bg.y+bg.contentWidth)> 1040 then
+            bg:translate(0,-960)
+         end
+         if(bg2.y+bg2.contentWidth)> 1040 then
+            bg2:translate(0,-960)
+         end
+         if(bg3.y+bg3.contentWidth)> 1040 then
+            bg3:translate(0,-960)
+         end
+   end
+   Runtime:addEventListener("enterFrame", move)
    -- Initialize the scene here.
+
+local scoreText= display.newText("Score ", display.contentWidth -15, 10, native.systemFont, 10)
+
+sceneGroup:insert(scoreText);
+
+
    local buttonBack = widget.newButton(
     {
         left = 0,
@@ -177,6 +243,17 @@ function scene:show( event )
       -- Called when the scene is still off screen (but is about to come on screen).
 	player:setColor(composer.getVariable("playerColor"));
    elseif ( phase == "did" ) then
+
+ local scoreValueText= display.newText(score, display.contentWidth -14, 22, native.systemFont, 10)
+sceneGroup:insert(scoreValueText);
+
+   function update()
+   scoreValueText.text = score;
+   end
+
+  timer.performWithDelay(10,update,0, "score_timer")
+
+
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
@@ -191,6 +268,7 @@ function scene:hide( event )
    local phase = event.phase
  
    if ( phase == "will" ) then
+       timer.cancel( "score_timer" )
       -- Called when the scene is on screen (but is about to go off screen).
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.

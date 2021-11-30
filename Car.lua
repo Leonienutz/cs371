@@ -28,4 +28,9 @@ function Car:sound()
 	audio.play( soundEffect )
 end
 
+function Car:powerupsound()
+	local soundEffect2 = audio.loadSound( "PowerUp_Sound.wav" ) --https://mixkit.co/free-sound-effects/crash/
+	audio.play( soundEffect2 )
+end
+
 return Car;
