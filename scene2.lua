@@ -1,6 +1,11 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 score =0
+timealive = 0
+HitPoints = 3
+ secondsLeft = 0  -- 10 minutes * 60 seconds
+ clockText = display.newText( "0:00", display.contentCenterX + 130, -20, native.systemFont, 25 )
+clockText:setFillColor( 0,0 , 0 )
 local Player = require("Player");
 local Enemy = require("Enemy");
 local heart = require("addHeart")
@@ -36,6 +41,7 @@ local function spawnTime()
    power2:Fall();
    table.insert(enemies, power2.shape) -- Maybe enemy.shape
 end
+
 local function spawnShield()
    local power3 = shield:new({yPos = -60});
    power3:spawn(scene.view);
@@ -53,29 +59,54 @@ local function enterFrame()
    if (temp <= 3) then
       spawnTime();
       end
-   if (temp <= 2) then
+   if (temp <= 2) then 
       spawnHeart();
       end   
-   if (temp <= 1) then
+   if (temp <= 20) then
       spawnShield();
       end
 
+	if(player.hp <= 0 or secondsLeft >= 300) then
+      timer.cancel( countDownTimer )
+		player:delete();
+      print(secondsLeft)
+      print()
+      print(HitPoints)
+     --timealive = 180 - 
+      score = (score + HitPoints + secondsLeft) * 100
+		local options = {
+         isModal = true,
+      effect = "fade",
+      time = 500,
+	  params = {
+		pPoints = score;
+	  }
+   }
+		Runtime:removeEventListener("enterFrame", enterFrame)
+		composer.showOverlay("gameOver", options);
+		
+	end
+	
 end
 
 
 
 local function moveLeft()
+   if(player.shape ~= nil)then 
 	if(player.shape.x < 80) then
 		return
 	end
 	player:moveLeft();
 end
+end
 
 local function moveRight()
+    if(player.shape ~= nil)then
 	if(player.shape.x > display.contentWidth - 80) then
 		return
 	end
 	player:moveRight();
+end
 end
 
 	local function leftHandler(event)
@@ -146,6 +177,9 @@ local scoreText= display.newText("Score ", display.contentWidth -15, 10, native.
 
 sceneGroup:insert(scoreText);
 
+local PlayerHP= display.newText("HP:  ", display.contentWidth -25, 40, native.systemFont, 10)
+
+sceneGroup:insert(PlayerHP);
 
    local buttonBack = widget.newButton(
     {
@@ -241,16 +275,36 @@ function scene:show( event )
 
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      
+      local function updateTime( event )
+    -- Decrement the number of seconds
+    secondsLeft = secondsLeft + 1
+    -- Time is tracked in seconds; convert it to minutes and seconds
+    local minutes = math.floor( secondsLeft / 60 )
+    local seconds = secondsLeft % 60
+    -- Make it a formatted string
+    local timeDisplay = string.format( "%2d:%02d", minutes, seconds )
+    -- Update the text object
+    clockText.text = timeDisplay
+end
+   if player.hp > 0 then
+	  countDownTimer = timer.performWithDelay( 1000, updateTime, secondsLeft )
+   end
+	  Runtime:addEventListener("enterFrame", enterFrame)
 	player:setColor(composer.getVariable("playerColor"));
+	
    elseif ( phase == "did" ) then
 
  local scoreValueText= display.newText(score, display.contentWidth -14, 22, native.systemFont, 10)
 sceneGroup:insert(scoreValueText);
-
+local HPValueText= display.newText(player.hp, display.contentWidth -14, 40, native.systemFont, 10)
+sceneGroup:insert(HPValueText);
+-------------------------------------------------------------------------------------------------------------
    function update()
    scoreValueText.text = score;
+   HPValueText.text = HitPoints
    end
-
+------------------------------------------------------------------------------------------------------
   timer.performWithDelay(10,update,0, "score_timer")
 
 
@@ -266,7 +320,7 @@ function scene:hide( event )
  
    local sceneGroup = self.view
    local phase = event.phase
- 
+   Runtime:removeEventListener("enterFrame", enterFrame)
    if ( phase == "will" ) then
        timer.cancel( "score_timer" )
       -- Called when the scene is on screen (but is about to go off screen).
@@ -276,11 +330,13 @@ function scene:hide( event )
 
         for i, v in ipairs(enemies) do
           if v.removeSelf then
-            v:removeSelf()
+			transition.cancel(v.transition)
+            v:removeSelf();
           end
         end
 
         enemies = {}
+		
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
    end
@@ -304,7 +360,7 @@ scene:addEventListener("show", scene )
 scene:addEventListener("hide", scene )
 scene:addEventListener("destroy", scene )
 
-Runtime:addEventListener("enterFrame", enterFrame)
+
 ---------------------------------------------------------------------------------
  
 return scene

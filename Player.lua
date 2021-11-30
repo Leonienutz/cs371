@@ -1,6 +1,6 @@
 --Player Class. Inherits from Car class.
 local Car = require("Car")
-local Player = Car:new({xPos = display.contentCenterX, yPos = display.contentHeight - 50, deltaY = 0, deltaX = 10, tag = "Player", physicsType = "kinematic"});
+local Player = Car:new({xPos = display.contentCenterX, yPos = display.contentHeight - 50, deltaY = 0, deltaX = 10, tag = "Player", physicsType = "kinematic", hp = 3});
 
 
 local opt =
@@ -83,17 +83,21 @@ function Player:spawn()
 				print("I hit Something!")
 				if(event.other.tag == "Enemy") then
 					print("I hit enemy!")
-					score = 0;
 					self:sound();
 					anim2.x = event.target.x
 					anim2:setSequence("explode");
 					anim2:play();
-					
-					--self:delete();
+					self.hp = self.hp - 1;
+					HitPoints = self.hp;
+
+					-- if(self.hp == 0) then
+						-- self:delete();
+					-- end
 				end
 				if(event.other.tag == "addTime") then
 					print("I hit addTime Power-up!")
 					score = score + 1;
+					secondsLeft = secondsLeft + 5;
 					self:powerupsound();
 					anim2.x = event.target.x
 					--anim2:setSequence("explode");
@@ -106,6 +110,8 @@ function Player:spawn()
 					score = score + 1;
 					self:powerupsound();
 					anim2.x = event.target.x
+					self.hp = self.hp + 1;
+					HitPoints = self.hp;
 					--anim2:setSequence("explode");
 					--anim2:play();
 					
@@ -115,7 +121,13 @@ function Player:spawn()
 					print("I hit addShield Power-up!")
 					score = score + 1;
 					self:powerupsound();
+					self.shape.physicsType = "kinematic"
 					anim2.x = event.target.x
+					local function listener( event )
+    						print( "shield gone" )
+    						self.shape.physicsType = "static"
+					end
+					timer.performWithDelay(2000, listener)
 					--anim2:setSequence("explode");
 					--anim2:play();
 					

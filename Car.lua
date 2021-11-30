@@ -19,8 +19,10 @@ function Car:spawn()
 end
 
 function Car:delete()
-	self.shape:removeSelf();
-	self.shape = nil;
+	if(self.shape ~= nil) then
+		self.shape:removeSelf();
+		self.shape = nil;
+	end
 end
 
 function Car:sound()

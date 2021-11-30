@@ -26,28 +26,28 @@ function scene:create( event )
    sceneGroup:insert(bg)
    -- Create the menu buttons
    -- button to start playing the game
-   local playButton = display.newRoundedRect(display.contentCenterX, display.contentCenterY -50, 230, 60, 12);
-   playButton:setFillColor(0.75, 0.09, 0.09)
+   local playButton = display.newRoundedRect(display.contentCenterX, display.contentCenterY +150, 230, 60, 12);
+   playButton:setFillColor(0.1, 0.8, 0.1)
    sceneGroup:insert(playButton);
 
    -- button to get to the options menu
    local optionsButton = display.newRoundedRect(display.contentCenterX, display.contentCenterY +50, 230, 60, 12);
-   optionsButton:setFillColor(0.1, 0.8, 0.1)
+   optionsButton:setFillColor(0.9, 0.9, 0)
    sceneGroup:insert(optionsButton);
 
    -- button to get to the leaderboard
-   local leaderboardButton = display.newRoundedRect(display.contentCenterX, display.contentCenterY +150, 230, 60, 12);
-   leaderboardButton:setFillColor(0.4, 0.57, 0.85)
+   local leaderboardButton = display.newRoundedRect(display.contentCenterX, display.contentCenterY -50, 230, 60, 12);
+   leaderboardButton:setFillColor(0.75, 0.09, 0.09)
    sceneGroup:insert(leaderboardButton);
 
    -- display text
    local header = display.newText("HIGHWAY MADNESS", display.contentCenterX, display.contentCenterY -180, native.systemFont, 26 )
    sceneGroup:insert(header);
-   local playText = display.newText("PLAY", display.contentCenterX, display.contentCenterY -50, native.systemFont, 26 )
+   local playText = display.newText("PLAY", display.contentCenterX, display.contentCenterY +150, native.systemFont, 26 )
    sceneGroup:insert(playText);
    local optionsText = display.newText("OPTIONS", display.contentCenterX, display.contentCenterY +50, native.systemFont, 26 )
    sceneGroup:insert(optionsText);
-   local leaderboardText = display.newText("LEADERBOARD", display.contentCenterX, display.contentCenterY +150, native.systemFont, 26 )
+   local leaderboardText = display.newText("LEADERBOARD", display.contentCenterX, display.contentCenterY -50, native.systemFont, 26 )
    sceneGroup:insert(leaderboardText);
 
    -- function to start the game
